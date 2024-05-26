@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ChatBotVC: UIViewController {
+class ChatBotVC: BaseVC {
     
     // MARK: - Properties
     private var messages = [Message]()
@@ -54,6 +54,12 @@ class ChatBotVC: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         setupLayout()
+        hideKeyboardWhenTappedAround()
+        setupKeyboardNotifications()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Functions
@@ -95,9 +101,10 @@ class ChatBotVC: UIViewController {
     }
     
     func scrollToBottom(animated: Bool) {
-            let indexPath = IndexPath(row: messages.count - 1, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
-        }
+        guard !messages.isEmpty else { return }
+        let indexPath = IndexPath(row: messages.count - 1, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
+    }
     
     // MARK: - Handlers
     @objc private func handleSend() {
@@ -105,6 +112,9 @@ class ChatBotVC: UIViewController {
         
         let userMessage = Message(text: text, isIncoming: false)
         messages.append(userMessage)
+        
+        /// 보내기 버튼 클릭 시에만 키보드를 내리지 않고 메시지를 전송
+        inputTextField.resignFirstResponder()
         
         /// 더미 답변 추가
         let botResponse = Message(text: "잠을 자야 내일 수업을 듣죠 이사람아. 또 가서 졸거야? 어? 말좀 해봐", isIncoming: true)
@@ -122,6 +132,39 @@ class ChatBotVC: UIViewController {
         let imageName = hasText ? "send_activate" : "send_deactivate"
         sendButton.setImage(UIImage(named: imageName), for: .normal)
         sendButton.isEnabled = hasText
+    }
+    
+    // MARK: - UIGestureRecognizerDelegate
+    /// 보내기 버튼 눌렀을 때만 BaseVC의 hideKeyboardWhenTappedAround가 동작 안하게끔 touch 영역에서 제외시킨다.
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return touch.view != sendButton
+    }
+    
+    // MARK: - Keyboard Handling
+    private func setupKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func handleKeyboardWillShow(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        
+        let bottomInset = keyboardFrame.height - view.safeAreaInsets.bottom
+        UIView.animate(withDuration: 0.3) {
+            self.tableView.contentInset.bottom = bottomInset
+            self.tableView.scrollIndicatorInsets.bottom = bottomInset
+            self.inputContainerView.transform = CGAffineTransform(translationX: 0, y: -bottomInset)
+            self.scrollToBottom(animated: true)
+        }
+    }
+    
+    @objc private func handleKeyboardWillHide(notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.tableView.contentInset.bottom = 0
+            self.tableView.scrollIndicatorInsets.bottom = 0
+            self.inputContainerView.transform = .identity
+        }
     }
 }
 

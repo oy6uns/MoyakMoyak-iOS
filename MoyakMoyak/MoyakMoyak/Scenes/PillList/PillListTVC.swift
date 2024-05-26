@@ -12,11 +12,9 @@ import SwiftyColor
 import Then
 
 // MARK: - MusicTableViewCell
-
 final class PillListTVC: UITableViewCell {
     
     // MARK: - UI Components.
-    
     private let albumContainerView = UIView()
     private let albumImageView = UIImageView()
     private let titleLabel = UILabel().then {
@@ -36,7 +34,6 @@ final class PillListTVC: UITableViewCell {
     }()
 
     // MARK: - Life Cycles
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layout()
@@ -48,12 +45,9 @@ final class PillListTVC: UITableViewCell {
     
 }
 
-// MARK: - Extensions
-
 extension PillListTVC {
     
     // MARK: - Layout Helpers
-    
     private func layout() {
         backgroundColor = .clear
         contentView.backgroundColor = .clear
@@ -61,7 +55,6 @@ extension PillListTVC {
         [albumContainerView, titleLabel, singerLabel, clickableButton].forEach {
             contentView.addSubview($0)
         }
-
         
         albumContainerView.addSubview(albumImageView)
         albumContainerView.snp.makeConstraints {
@@ -92,7 +85,6 @@ extension PillListTVC {
     }
     
     // MARK: - General Helpers
-    
     func dataBind(model: PillModel) {
         titleLabel.text = model.pillName
         singerLabel.text = model.shortInfo
