@@ -35,12 +35,12 @@ class ChatBotVC: UIViewController {
         $0.placeholder = "궁금한 것을 물어보세요"
         $0.borderStyle = .none
         $0.font = UIFont.systemFont(ofSize: 16)
+        $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
-    private let sendButton = UIButton(type: .system).then {
-        $0.setTitle("➤", for: .normal)
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 24)
-        $0.setTitleColor(.black, for: .normal)
+    private let sendButton = UIButton().then {
+        $0.setImage(UIImage(named: "send_deactivate"), for: .normal)
+        $0.isEnabled = false
         $0.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
     }
     
@@ -76,7 +76,7 @@ class ChatBotVC: UIViewController {
         }
         
         inputTextField.snp.makeConstraints {
-            $0.leading.equalTo(inputContainerView).offset(16)
+            $0.leading.equalTo(inputContainerView).offset(20)
             $0.centerY.equalTo(inputContainerView)
             $0.trailing.equalTo(sendButton.snp.leading).offset(-8)
         }
@@ -84,7 +84,8 @@ class ChatBotVC: UIViewController {
         sendButton.snp.makeConstraints {
             $0.trailing.equalTo(inputContainerView).offset(-12)
             $0.centerY.equalTo(inputContainerView)
-            $0.width.equalTo(50)
+            $0.width.equalTo(32)
+            $0.height.equalTo(32)
         }
     }
     
@@ -92,6 +93,13 @@ class ChatBotVC: UIViewController {
     @objc private func handleSend() {
         // Send button action handler
         print("Send button tapped")
+    }
+    
+    @objc private func textFieldDidChange() {
+        let hasText = !inputTextField.text!.isEmpty
+        let imageName = hasText ? "send_activate" : "send_deactivate"
+        sendButton.setImage(UIImage(named: imageName), for: .normal)
+        sendButton.isEnabled = hasText
     }
 }
 
