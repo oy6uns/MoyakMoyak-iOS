@@ -75,7 +75,7 @@ class ChatBotVC: BaseVC {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(appName.snp.bottom).offset(8.adjustedH)
+            $0.top.equalTo(appName.snp.bottom).offset(16.adjustedH)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(inputContainerView.snp.top).offset(-16)
         }
