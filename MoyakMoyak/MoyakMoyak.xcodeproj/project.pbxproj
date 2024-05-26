@@ -50,6 +50,7 @@
 		854525E02C032BF400440CE8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854525DA2C032BF400440CE8 /* Environment.swift */; };
 		854525E32C03599400440CE8 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854525E22C03599400440CE8 /* Photos.framework */; };
 		854525E52C03599C00440CE8 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854525E42C03599C00440CE8 /* PhotosUI.framework */; };
+		858BF70A2C03DE99008FEF5D /* ButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858BF7092C03DE99008FEF5D /* ButtonsView.swift */; };
 		85A1107D2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85A1107C2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf */; };
 		85A110802C037862008E4C0A /* UhBee Miwan Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85A1107E2C037862008E4C0A /* UhBee Miwan Bold.ttf */; };
 		85A110812C037862008E4C0A /* UhBee Miwan.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85A1107F2C037862008E4C0A /* UhBee Miwan.ttf */; };
@@ -98,6 +99,7 @@
 		854525DA2C032BF400440CE8 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		854525E22C03599400440CE8 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		854525E42C03599C00440CE8 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
+		858BF7092C03DE99008FEF5D /* ButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsView.swift; sourceTree = "<group>"; };
 		85A1107C2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UhBeeZZIBA-Regular.ttf"; sourceTree = "<group>"; };
 		85A1107E2C037862008E4C0A /* UhBee Miwan Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UhBee Miwan Bold.ttf"; sourceTree = "<group>"; };
 		85A1107F2C037862008E4C0A /* UhBee Miwan.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UhBee Miwan.ttf"; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 			children = (
 				854525BA2C03216300440CE8 /* PicCVC.swift */,
 				854525B92C03216300440CE8 /* PicVC.swift */,
+				858BF7092C03DE99008FEF5D /* ButtonsView.swift */,
 			);
 			path = TakePic;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 				854525A92C01E5E600440CE8 /* UIFont+.swift in Sources */,
 				854525762C01DFCA00440CE8 /* TabBarController.swift in Sources */,
 				854525DD2C032BF400440CE8 /* ImageRequestDto.swift in Sources */,
+				858BF70A2C03DE99008FEF5D /* ButtonsView.swift in Sources */,
 				854525DC2C032BF400440CE8 /* ImageResponseDto.swift in Sources */,
 				854525E02C032BF400440CE8 /* Environment.swift in Sources */,
 				854525C82C03235200440CE8 /* PillListVC.swift in Sources */,

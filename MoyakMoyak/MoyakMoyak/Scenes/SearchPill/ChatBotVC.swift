@@ -116,7 +116,8 @@ class ChatBotVC: BaseVC {
         /// 보내기 버튼 클릭 시에만 키보드를 내리지 않고 메시지를 전송
         inputTextField.resignFirstResponder()
         
-        /// 더미 답변 추가
+        // MARK: 서버통신2 userMessage 전송 후 답변 받아서 아래 botResponse에 담아주기
+        
         let botResponse = Message(text: "잠을 자야 내일 수업을 듣죠 이사람아. 또 가서 졸거야? 어? 말좀 해봐", isIncoming: true)
         messages.append(botResponse)
         

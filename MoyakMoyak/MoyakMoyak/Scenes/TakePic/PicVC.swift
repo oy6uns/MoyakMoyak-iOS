@@ -40,45 +40,19 @@ class PicVC: UIViewController {
     var filterdata: [PillModel] = []
     
     private let closeButton = UIButton().then {
-        $0.setBackgroundImage(UIImage(named: "closeBtn"), for: .normal)
+        $0.setBackgroundImage(UIImage(named: "close_btn"), for: .normal)
         $0.contentMode = .scaleToFill
     }
     
     private let titleLabel = UILabel().then {
         $0.text = "알약 사진촬영"
-        $0.font = .systemFont(ofSize: 16.adjustedW, weight: .semibold)
-    }
-    
-    let picBtn = UIButton().then {
-        $0.backgroundColor = .white
-        $0.layer.cornerRadius = 4
-        $0.layer.borderWidth = 1.5
-        $0.layer.borderColor = UIColor.black.cgColor
-        $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-        $0.setTitle("앨범에서 찾기", for: .normal)
-        $0.setTitleColor(.black, for: .normal)
-    }
-    
-    let cameraBtn = UIButton().then {
-        $0.backgroundColor = .white
-        $0.layer.cornerRadius = 4
-        $0.layer.borderWidth = 1.5
-        $0.layer.borderColor = UIColor.black.cgColor
-        $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-        $0.setTitle("사진 촬영하기", for: .normal)
-        $0.setTitleColor(.black, for: .normal)
+        $0.textColor = 0x404042.color
+        $0.font = UIFont.uhbeeMiwan(type: .regular, size: 36)
     }
     
     let picView = UIImageView().then {
+        $0.image = UIImage(named: "upload_pic")
         $0.backgroundColor = .clear
-        $0.layer.cornerRadius = 4
-        $0.layer.borderWidth = 1.5
-        $0.layer.borderColor = UIColor.black.cgColor
-    }
-    
-    let breedLabel = UILabel().then {
-        $0.backgroundColor = .clear
-        $0.textColor = .black
     }
     
     let imagePickerController = UIImagePickerController()
@@ -89,7 +63,7 @@ class PicVC: UIViewController {
         plugins: [NetworkLoggerPlugin(verbose: true)]
     )
     
-    lazy var myPillListCV : UICollectionView  = {
+    lazy var myPillListCV: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -97,21 +71,10 @@ class PicVC: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
-        //        collectionView.contentInset.bottom = 60
-        collectionView.isUserInteractionEnabled = true
         return collectionView
     }()
     
-    private let uploadBtn = UIButton().then {
-        $0.backgroundColor = .white
-        $0.layer.cornerRadius = 25
-        $0.layer.borderWidth = 1.0
-        $0.layer.borderColor = UIColor.black.cgColor
-        $0.titleLabel?.font = .systemFont(ofSize: 16)
-        $0.setTitle("확인", for: .normal)
-        $0.setTitleColor(.black, for: .normal)
-        $0.isUserInteractionEnabled = false
-    }
+    private let buttonsView = ButtonsView()
     
     // MARK: - Life Cycles
     override func viewDidLoad() {
@@ -125,6 +88,8 @@ class PicVC: UIViewController {
         setPress()
         registerCVC()
         
+        // 초기 버튼 타입 설정
+        buttonsView.configureButtonsView(for: .twoButtons)
     }
     
     // MARK: - Function
@@ -135,66 +100,43 @@ class PicVC: UIViewController {
     
     private func setPress() {
         closeButton.press {
-            if self.navigationController == nil{
+            if self.navigationController == nil {
                 self.dismiss(animated: true, completion: nil)
             }
             self.navigationController?.dismiss(animated: true)
         }
         
-        picBtn.press {[self] in
+        buttonsView.getPicButton().press { [self] in
             self.imagePickerController.sourceType = .photoLibrary
             self.present(self.imagePickerController, animated: true, completion: nil)
             
             // 서버 통신 후로 수정해주어야 함.
-            uploadBtn.isUserInteractionEnabled = true
-            uploadBtn.backgroundColor = .black
-            uploadBtn.setTitleColor(.white, for: .normal)
+            buttonsView.getUploadButton().isUserInteractionEnabled = true
+            buttonsView.getUploadButton().backgroundColor = .black
+            buttonsView.getUploadButton().setTitleColor(.white, for: .normal)
         }
         
-        cameraBtn.press { [self] in
-            //            switch PHPhotoLibrary.authorizationStatus() {
-            //            case .denied:
-            //                self.settingAlert()
-            //            case .restricted:
-            //                break
-            //            case .authorized:
-            //                self.imagePickerController.sourceType = .camera
-            //                self.present(self.imagePickerController, animated: true, completion: nil)
-            //            case .notDetermined:
-            //                PHPhotoLibrary.requestAuthorization({ state in
-            //                    if state == .authorized {
-            //                        self.imagePickerController.sourceType = .camera
-            //                        self.present(self.imagePickerController, animated: true, completion: nil)
-            //                    } else {
-            //                        self.dismiss(animated: true, completion: nil)
-            //                    }
-            //                })
-            //            default:
-            //                break
-            //            }
+        buttonsView.getCameraButton().press { [self] in
             let pickerController = UIImagePickerController() // must be used from main thread only
             pickerController.sourceType = .camera
             pickerController.allowsEditing = false
             pickerController.mediaTypes = ["public.image"]
-            // 만약 비디오가 필요한 경우,
-            //      imagePicker.mediaTypes = ["public.movie"]
-            //      imagePicker.videoQuality = .typeHigh
             pickerController.delegate = self
             self.present(pickerController, animated: true)
             // 서버 통신 후로 수정해주어야 함.
-            uploadBtn.isUserInteractionEnabled = true
-            uploadBtn.backgroundColor = .black
-            uploadBtn.setTitleColor(.white, for: .normal)
+            buttonsView.getUploadButton().isUserInteractionEnabled = true
+            buttonsView.getUploadButton().backgroundColor = .black
+            buttonsView.getUploadButton().setTitleColor(.white, for: .normal)
         }
         
-        uploadBtn.press {
+        buttonsView.getUploadButton().press {
             let currentTime = Date()
             
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd HH:mm"
             let formattedDate = formatter.string(from: currentTime)
             
-            var infoData : String = ""
+            var infoData: String = ""
             
             for pill in self.filterdata {
                 if infoData.isEmpty {
@@ -209,14 +151,14 @@ class PicVC: UIViewController {
             NotificationCenter.default.post(name: NSNotification.Name("DismissModalView"), object: nil, userInfo: nil)
             
             print(formattedDate)
-            if self.navigationController == nil{
+            if self.navigationController == nil {
                 self.dismiss(animated: true, completion: nil)
             }
             self.navigationController?.dismiss(animated: true)
         }
     }
     
-    private func settingAlert(){
+    private func settingAlert() {
         if let appName = Bundle.main.infoDictionary!["CFBundleName"] as? String {
             let alert = UIAlertController(title: "설정", message: "\(appName)이(가) 카메라 접근 허용되어 있지 않습니다. 설정화면으로 가시겠습니까?", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "취소", style: .default)
@@ -227,32 +169,31 @@ class PicVC: UIViewController {
             alert.addAction(cancelAction)
             alert.addAction(confirmAction)
             self.present(alert, animated: true, completion: nil)
-        } else {
-            
         }
     }
     
-    // MARK: - Server Helpers
+    // MARK: - Server
     func sendImage(param: ImageRequestDto) {
         userRouter.request(.drugIdentification(param: param)) { response in
+            
+            // MARK: 서버통신1 이미지 전송 후 Detection 및 부작용 탐지 결과 확인
+        
             switch response {
             case .success(let result):
                 let status = result.statusCode
                 if status >= 200 && status < 300 {
                     do {
                         self.drugData = try result.map(ImageResponseDto.self)
-                        if let result = self.drugData{
-                            //                            print(result.drug)
+                        if let result = self.drugData {
                             self.filterdata = []
-                            for pill in result.drug{
+                            for pill in result.drug {
                                 self.pillList[pill[0] - 1].num = pill[1]
                                 self.filterdata.append(self.pillList[pill[0] - 1])
                             }
                             print(self.filterdata)
                             self.myPillListCV.reloadData()
                         }
-                    }
-                    catch(let error) {
+                    } catch(let error) {
                         print(error.localizedDescription)
                     }
                 }
@@ -264,20 +205,16 @@ class PicVC: UIViewController {
             }
         }
     }
-    
-    private func configBreed(breed: String) {
-        breedLabel.text = "This dog's breed is a \(breed)!"
-    }
 }
 
-extension PicVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+extension PicVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             picView.image = image
         }
         guard let image = picView.image else { return }
         let data = image.jpegData(compressionQuality: 1.0)
-        if let data = data{
+        if let data = data {
             let param = ImageRequestDto(image: data)
             sendImage(param: param)
         }
@@ -286,61 +223,45 @@ extension PicVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
 }
 
 // MARK: - Layout
-extension PicVC{
-    private func setLayout(){
-        view.addSubViews([closeButton, titleLabel, picBtn, cameraBtn, picView, myPillListCV, uploadBtn])
+extension PicVC {
+    private func setLayout() {
+        view.addSubViews([closeButton, titleLabel, picView, myPillListCV, buttonsView])
         
-        closeButton.snp.makeConstraints{
-            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(13.adjustedH)
+        closeButton.snp.makeConstraints {
             $0.leading.equalTo(self.view.safeAreaLayoutGuide).offset(16.adjustedW)
+            $0.top.leading.equalTo(self.view.safeAreaLayoutGuide).offset(20.adjustedW)
             $0.width.equalTo(24)
             $0.height.equalTo(24)
         }
         
-        titleLabel.snp.makeConstraints{
-            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(15)
+        titleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(56.adjustedH)
             $0.centerX.equalTo(self.view.safeAreaLayoutGuide)
         }
         
-        picBtn.snp.makeConstraints{
-            $0.top.equalTo(titleLabel.snp.bottom).offset(28)
-            $0.leading.equalTo(self.view.safeAreaLayoutGuide).offset(40.adjustedW)
-            $0.width.equalTo(120.adjustedW)
-            $0.height.equalTo(40.adjustedW)
-        }
-        
-        cameraBtn.snp.makeConstraints{
-            $0.top.equalTo(titleLabel.snp.bottom).offset(28)
-            $0.trailing.equalTo(self.view.safeAreaLayoutGuide).offset(-40.adjustedW)
-            $0.width.equalTo(120.adjustedW)
-            $0.height.equalTo(40.adjustedW)
-        }
-        
-        picView.snp.makeConstraints{
-            $0.top.equalTo(picBtn.snp.bottom).offset(24)
+        picView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(32.adjustedH)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(300.adjustedW)
             $0.height.equalTo(300.adjustedW)
         }
         
-        myPillListCV.snp.makeConstraints{
+        myPillListCV.snp.makeConstraints {
             $0.top.equalTo(picView.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.bottom.equalToSuperview().offset(-110)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalTo(buttonsView.snp.top).offset(-24)
         }
         
-        uploadBtn.snp.makeConstraints{
-            $0.centerX.equalToSuperview()
+        buttonsView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(90.adjustedH)
             $0.bottom.equalToSuperview().offset(-50)
-            $0.width.equalTo(210.adjustedW)
-            $0.height.equalTo(46.adjustedH)
         }
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension PicVC: UICollectionViewDelegateFlowLayout{
+extension PicVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 360, height: 71)
     }
@@ -348,17 +269,10 @@ extension PicVC: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 4
     }
-    
-    //    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    //        let detailBookVC = DetailViewController()
-    //        detailBookVC.bookdata = CameBookVC.bookList[indexPath.row]
-    //        detailBookVC.modalPresentationStyle = .overFullScreen
-    //        present(detailBookVC, animated: true, completion:nil)
-    //    }
 }
 
 // MARK: - UICollectionViewDataSource
-extension PicVC : UICollectionViewDataSource {
+extension PicVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filterdata.count
     }
