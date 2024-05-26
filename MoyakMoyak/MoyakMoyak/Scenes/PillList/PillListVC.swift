@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-class PillListVC: UIViewController {
+class PillListVC: BaseVC {
     
     private let appName = UILabel().then{
         $0.text = "모약모약"
@@ -68,6 +68,7 @@ class PillListVC: UIViewController {
         registerTV()
         setLayout()
         customizeSearchBar()
+        hideKeyboardWhenTappedAround()
     }
     
     private func registerTV() {
