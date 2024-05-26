@@ -56,7 +56,7 @@ class ChatBotVC: UIViewController {
         setupLayout()
     }
     
-    // MARK: - Setup Layout
+    // MARK: - Functions
     private func setupLayout() {
         view.addSubviews([appName, tableView, inputContainerView])
         
@@ -94,6 +94,11 @@ class ChatBotVC: UIViewController {
         }
     }
     
+    func scrollToBottom(animated: Bool) {
+            let indexPath = IndexPath(row: messages.count - 1, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
+        }
+    
     // MARK: - Handlers
     @objc private func handleSend() {
         guard let text = inputTextField.text, !text.isEmpty else { return }
@@ -101,7 +106,7 @@ class ChatBotVC: UIViewController {
         let userMessage = Message(text: text, isIncoming: false)
         messages.append(userMessage)
         
-        // 더미 답변 추가
+        /// 더미 답변 추가
         let botResponse = Message(text: "잠을 자야 내일 수업을 듣죠 이사람아. 또 가서 졸거야? 어? 말좀 해봐", isIncoming: true)
         messages.append(botResponse)
         
@@ -109,19 +114,14 @@ class ChatBotVC: UIViewController {
         textFieldDidChange()
         
         tableView.reloadData()
-        scrollToBottom()
+        scrollToBottom(animated: false)
     }
-
+    
     @objc private func textFieldDidChange() {
         let hasText = !inputTextField.text!.isEmpty
         let imageName = hasText ? "send_activate" : "send_deactivate"
         sendButton.setImage(UIImage(named: imageName), for: .normal)
         sendButton.isEnabled = hasText
-    }
-    
-    private func scrollToBottom() {
-        let indexPath = IndexPath(row: messages.count - 1, section: 0)
-        tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
     }
 }
 
