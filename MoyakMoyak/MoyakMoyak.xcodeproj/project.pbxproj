@@ -53,6 +53,8 @@
 		85A1107D2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85A1107C2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf */; };
 		85A110802C037862008E4C0A /* UhBee Miwan Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85A1107E2C037862008E4C0A /* UhBee Miwan Bold.ttf */; };
 		85A110812C037862008E4C0A /* UhBee Miwan.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85A1107F2C037862008E4C0A /* UhBee Miwan.ttf */; };
+		85A110832C03A073008E4C0A /* ChatBotTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A110822C03A073008E4C0A /* ChatBotTVC.swift */; };
+		85A110852C03A07E008E4C0A /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A110842C03A07E008E4C0A /* ChatModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -99,6 +101,8 @@
 		85A1107C2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UhBeeZZIBA-Regular.ttf"; sourceTree = "<group>"; };
 		85A1107E2C037862008E4C0A /* UhBee Miwan Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UhBee Miwan Bold.ttf"; sourceTree = "<group>"; };
 		85A1107F2C037862008E4C0A /* UhBee Miwan.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UhBee Miwan.ttf"; sourceTree = "<group>"; };
+		85A110822C03A073008E4C0A /* ChatBotTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBotTVC.swift; sourceTree = "<group>"; };
+		85A110842C03A07E008E4C0A /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -265,6 +269,8 @@
 			isa = PBXGroup;
 			children = (
 				854525D32C0323BA00440CE8 /* ChatBotVC.swift */,
+				85A110822C03A073008E4C0A /* ChatBotTVC.swift */,
+				85A110842C03A07E008E4C0A /* ChatModel.swift */,
 			);
 			path = SearchPill;
 			sourceTree = "<group>";
@@ -386,6 +392,7 @@
 				854525E02C032BF400440CE8 /* Environment.swift in Sources */,
 				854525C82C03235200440CE8 /* PillListVC.swift in Sources */,
 				854525952C01E5D300440CE8 /* BaseNC.swift in Sources */,
+				85A110852C03A07E008E4C0A /* ChatModel.swift in Sources */,
 				854525AA2C01E5E600440CE8 /* UIView+.swift in Sources */,
 				854525D02C03238100440CE8 /* MyPillModel.swift in Sources */,
 				854525DF2C032BF400440CE8 /* UserRouter.swift in Sources */,
@@ -401,6 +408,7 @@
 				854525AB2C01E5E600440CE8 /* String+.swift in Sources */,
 				854525A82C01E5E600440CE8 /* NSObject+.swift in Sources */,
 				854525B42C01E5E600440CE8 /* Adjusted+.swift in Sources */,
+				85A110832C03A073008E4C0A /* ChatBotTVC.swift in Sources */,
 				854525AF2C01E5E600440CE8 /* UILabel+.swift in Sources */,
 				854525B32C01E5E600440CE8 /* UIColor+.swift in Sources */,
 				854525A62C01E5E600440CE8 /* UserDefaults+.swift in Sources */,

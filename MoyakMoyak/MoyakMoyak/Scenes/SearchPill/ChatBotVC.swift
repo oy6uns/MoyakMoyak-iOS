@@ -12,6 +12,8 @@ import Then
 class ChatBotVC: UIViewController {
     
     // MARK: - Properties
+    private var messages = [Message]()
+    
     private let appName = UILabel().then{
         $0.text = "모약모약"
         $0.textColor = 0x404042.color
@@ -19,8 +21,8 @@ class ChatBotVC: UIViewController {
     }
     
     private let tableView = UITableView().then {
-        $0.register(ChatBotCell.self, forCellReuseIdentifier: "ChatBotCell")
-        $0.backgroundColor = .systemMint
+        $0.register(ChatBotTVC.self, forCellReuseIdentifier: "ChatBotCell")
+        $0.backgroundColor = .white
         $0.separatorStyle = .none
     }
     
@@ -47,7 +49,10 @@ class ChatBotVC: UIViewController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .white
+        tableView.dataSource = self
+        tableView.delegate = self
         setupLayout()
     }
     
@@ -64,7 +69,7 @@ class ChatBotVC: UIViewController {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(appName.snp.bottom).offset(16)
+            $0.top.equalTo(appName.snp.bottom).offset(8.adjustedH)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(inputContainerView.snp.top).offset(-16)
         }
@@ -91,49 +96,53 @@ class ChatBotVC: UIViewController {
     
     // MARK: - Handlers
     @objc private func handleSend() {
-        // Send button action handler
-        print("Send button tapped")
+        guard let text = inputTextField.text, !text.isEmpty else { return }
+        
+        let userMessage = Message(text: text, isIncoming: false)
+        messages.append(userMessage)
+        
+        // 더미 답변 추가
+        let botResponse = Message(text: "잠을 자야 내일 수업을 듣죠 이사람아. 또 가서 졸거야? 어? 말좀 해봐", isIncoming: true)
+        messages.append(botResponse)
+        
+        inputTextField.text = nil
+        textFieldDidChange()
+        
+        tableView.reloadData()
+        scrollToBottom()
     }
-    
+
     @objc private func textFieldDidChange() {
         let hasText = !inputTextField.text!.isEmpty
         let imageName = hasText ? "send_activate" : "send_deactivate"
         sendButton.setImage(UIImage(named: imageName), for: .normal)
         sendButton.isEnabled = hasText
     }
+    
+    private func scrollToBottom() {
+        let indexPath = IndexPath(row: messages.count - 1, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+    }
 }
 
-class ChatBotCell: UITableViewCell {
-    
-    private let messageLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 16)
-        $0.numberOfLines = 0
-        $0.backgroundColor = .lightGray
-        $0.textColor = .black
-        $0.layer.cornerRadius = 12
-        $0.clipsToBounds = true
-        $0.textAlignment = .left
+// MARK: - UITableViewDelegate
+extension ChatBotVC: UITableViewDelegate {}
+
+// MARK: - UITableViewDataSource
+extension ChatBotVC: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupLayout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupLayout() {
-        contentView.addSubview(messageLabel)
-        
-        messageLabel.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(16)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatBotCell", for: indexPath) as? ChatBotTVC else {
+            return UITableViewCell()
         }
-    }
-    
-    func configure(with message: String) {
-        messageLabel.text = message
+        
+        let message = messages[indexPath.row]
+        print(message.text)
+        cell.configure(with: message)
+        return cell
     }
 }
 
