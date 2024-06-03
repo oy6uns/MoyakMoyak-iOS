@@ -50,6 +50,9 @@
 		854525E02C032BF400440CE8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854525DA2C032BF400440CE8 /* Environment.swift */; };
 		854525E32C03599400440CE8 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854525E22C03599400440CE8 /* Photos.framework */; };
 		854525E52C03599C00440CE8 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854525E42C03599C00440CE8 /* PhotosUI.framework */; };
+		8570B28C2C0CD52E00A44E7C /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8570B28B2C0CD52E00A44E7C /* OpenAIService.swift */; };
+		8570B28E2C0E695500A44E7C /* ChatRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8570B28D2C0E695500A44E7C /* ChatRequestDto.swift */; };
+		8570B2902C0E6A1800A44E7C /* ChatResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8570B28F2C0E6A1800A44E7C /* ChatResponseDto.swift */; };
 		858BF70A2C03DE99008FEF5D /* ButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858BF7092C03DE99008FEF5D /* ButtonsView.swift */; };
 		85A1107D2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85A1107C2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf */; };
 		85A110802C037862008E4C0A /* UhBee Miwan Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85A1107E2C037862008E4C0A /* UhBee Miwan Bold.ttf */; };
@@ -99,6 +102,9 @@
 		854525DA2C032BF400440CE8 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		854525E22C03599400440CE8 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		854525E42C03599C00440CE8 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
+		8570B28B2C0CD52E00A44E7C /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
+		8570B28D2C0E695500A44E7C /* ChatRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRequestDto.swift; sourceTree = "<group>"; };
+		8570B28F2C0E6A1800A44E7C /* ChatResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatResponseDto.swift; sourceTree = "<group>"; };
 		858BF7092C03DE99008FEF5D /* ButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsView.swift; sourceTree = "<group>"; };
 		85A1107C2C037398008E4C0A /* UhBeeZZIBA-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UhBeeZZIBA-Regular.ttf"; sourceTree = "<group>"; };
 		85A1107E2C037862008E4C0A /* UhBee Miwan Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "UhBee Miwan Bold.ttf"; sourceTree = "<group>"; };
@@ -169,9 +175,12 @@
 				854525D52C032BF400440CE8 /* Encodable+.swift */,
 				854525DA2C032BF400440CE8 /* Environment.swift */,
 				854525D72C032BF400440CE8 /* ImageRequestDto.swift */,
+				8570B28D2C0E695500A44E7C /* ChatRequestDto.swift */,
 				854525D62C032BF400440CE8 /* ImageResponseDto.swift */,
+				8570B28F2C0E6A1800A44E7C /* ChatResponseDto.swift */,
 				854525D82C032BF400440CE8 /* NetworkLoggerPlugin.swift */,
 				854525D92C032BF400440CE8 /* UserRouter.swift */,
+				8570B28B2C0CD52E00A44E7C /* OpenAIService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -398,6 +407,7 @@
 				854525952C01E5D300440CE8 /* BaseNC.swift in Sources */,
 				85A110852C03A07E008E4C0A /* ChatModel.swift in Sources */,
 				854525AA2C01E5E600440CE8 /* UIView+.swift in Sources */,
+				8570B28E2C0E695500A44E7C /* ChatRequestDto.swift in Sources */,
 				854525D02C03238100440CE8 /* MyPillModel.swift in Sources */,
 				854525DF2C032BF400440CE8 /* UserRouter.swift in Sources */,
 				854525BC2C03216300440CE8 /* PicCVC.swift in Sources */,
@@ -408,7 +418,9 @@
 				854525722C01DFCA00440CE8 /* AppDelegate.swift in Sources */,
 				854525742C01DFCA00440CE8 /* SceneDelegate.swift in Sources */,
 				854525AC2C01E5E600440CE8 /* UIStackView+.swift in Sources */,
+				8570B2902C0E6A1800A44E7C /* ChatResponseDto.swift in Sources */,
 				854525C72C03235200440CE8 /* PillModel.swift in Sources */,
+				8570B28C2C0CD52E00A44E7C /* OpenAIService.swift in Sources */,
 				854525AB2C01E5E600440CE8 /* String+.swift in Sources */,
 				854525A82C01E5E600440CE8 /* NSObject+.swift in Sources */,
 				854525B42C01E5E600440CE8 /* Adjusted+.swift in Sources */,
@@ -565,6 +577,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://port-0-moyakmoyak-be-ss7z32llwlw0d4i.sel5.cloudtype.app/";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -592,6 +605,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://port-0-moyakmoyak-be-ss7z32llwlw0d4i.sel5.cloudtype.app/";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;

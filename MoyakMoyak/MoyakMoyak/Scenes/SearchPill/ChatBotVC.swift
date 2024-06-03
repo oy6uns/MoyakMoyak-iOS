@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import Moya
 
 class ChatBotVC: BaseVC {
     
@@ -45,6 +46,18 @@ class ChatBotVC: BaseVC {
         $0.isEnabled = false
         $0.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
     }
+    
+    // MoyaProvider 설정
+    let provider = MoyaProvider<UserRouter>(requestClosure: { (endpoint: Endpoint, done: @escaping MoyaProvider.RequestResultClosure) in
+        do {
+            var request = try endpoint.urlRequest()
+            // Here you can modify the request if needed
+            print("Request URL: \(request.url?.absoluteString ?? "No URL")")
+            done(.success(request))
+        } catch {
+            done(.failure(MoyaError.underlying(error, nil)))
+        }
+    })
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -106,26 +119,45 @@ class ChatBotVC: BaseVC {
         tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
     }
     
-    // MARK: - Handlers
     @objc private func handleSend() {
         guard let text = inputTextField.text, !text.isEmpty else { return }
         
         let userMessage = Message(text: text, isIncoming: false)
         messages.append(userMessage)
         
-        /// 보내기 버튼 클릭 시에만 키보드를 내리지 않고 메시지를 전송
         inputTextField.resignFirstResponder()
         
-        // MARK: 서버통신2 userMessage 전송 후 답변 받아서 아래 botResponse에 담아주기
-        
-        let botResponse = Message(text: "잠을 자야 내일 수업을 듣죠 이사람아. 또 가서 졸거야? 어? 말좀 해봐", isIncoming: true)
-        messages.append(botResponse)
-        
-        inputTextField.text = nil
-        textFieldDidChange()
-        
-        tableView.reloadData()
-        scrollToBottom(animated: false)
+        sendMessageToChatbot(prompt: text) { [weak self] response in
+            guard let self = self else { return }
+            let botResponse = Message(text: response, isIncoming: true)
+            self.messages.append(botResponse)
+            
+            self.inputTextField.text = nil
+            self.textFieldDidChange()
+            
+            self.tableView.reloadData()
+            self.scrollToBottom(animated: false)
+        }
+    }
+    
+    private func sendMessageToChatbot(prompt: String, completion: @escaping (String) -> Void) {
+        let chatRequest = ChatRequestDto(query: prompt)
+        print(chatRequest)
+        provider.request(.chatMessage(param: chatRequest)) { result in
+            print(result)
+            switch result {
+            case .success(let response):
+                do {
+                    let chatResponse = try JSONDecoder().decode(ChatResponseDto.self, from: response.data)
+                    completion(chatResponse.answer + "\n" + "출처: \n" + chatResponse.references)
+                } catch {
+                    completion("Error: \(error.localizedDescription)")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+                completion("Error: Request failed")
+            }
+        }
     }
     
     @objc private func textFieldDidChange() {

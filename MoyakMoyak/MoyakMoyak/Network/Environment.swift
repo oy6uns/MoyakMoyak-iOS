@@ -8,7 +8,11 @@
 import Foundation
 
 // MARK: - Environment
-
 struct Environment {
-    static let baseURL = (Bundle.main.infoDictionary?["BASE_URL"] as! String).replacingOccurrences(of: " ", with: "")
+    static let baseURL: String = {
+        guard let baseURL = Bundle.main.infoDictionary?["BASE_URL"] as? String else {
+            fatalError("BASE_URL is not set in Info.plist")
+        }
+        return baseURL.replacingOccurrences(of: " ", with: "")
+    }()
 }

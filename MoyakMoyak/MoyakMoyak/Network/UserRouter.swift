@@ -11,6 +11,7 @@ import Moya
 
 enum UserRouter {
     case drugIdentification(param: ImageRequestDto)
+    case chatMessage(param:ChatRequestDto)
 }
 
 extension UserRouter: TargetType {
@@ -21,13 +22,17 @@ extension UserRouter: TargetType {
     var path: String {
         switch self {
         case .drugIdentification(param: _):
-            return "/predict"
+            return "predict"
+        case .chatMessage(param: _):
+            return "chatbot"
         }
     }
     
     var method: Moya.Method {
         switch self {
         case .drugIdentification(param: _):
+            return .post
+        case .chatMessage(param: _):
             return .post
         }
     }
@@ -44,6 +49,8 @@ extension UserRouter: TargetType {
                                               mimeType: "image/jpeg")
             multipartFormData.append(imageData)
             return .uploadMultipart(multipartFormData)
+        case .chatMessage(param: let param):
+            return .requestJSONEncodable(param)
         }
     }
     
@@ -56,4 +63,5 @@ extension UserRouter: TargetType {
         }
     }
 }
+
 

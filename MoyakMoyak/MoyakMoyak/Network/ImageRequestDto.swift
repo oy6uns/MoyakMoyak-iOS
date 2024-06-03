@@ -11,3 +11,5 @@ import Foundation
 struct ImageRequestDto: Codable {
     let image: Data
 }
+
+
