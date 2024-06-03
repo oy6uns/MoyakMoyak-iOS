@@ -149,7 +149,7 @@ class ChatBotVC: BaseVC {
             case .success(let response):
                 do {
                     let chatResponse = try JSONDecoder().decode(ChatResponseDto.self, from: response.data)
-                    completion(chatResponse.answer + "\n" + "출처: \n" + chatResponse.references)
+                    completion(chatResponse.answer + "\n\n" + "출처: " + chatResponse.references)
                 } catch {
                     completion("Error: \(error.localizedDescription)")
                 }
